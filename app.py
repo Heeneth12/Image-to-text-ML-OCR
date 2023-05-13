@@ -2,6 +2,7 @@ from flask import Flask, render_template,request,redirect,url_for
 import random
 import urllib.request
 import pytesseract
+from os import getenv
 
 app = Flask(__name__)
 
@@ -22,7 +23,7 @@ def url_reader():
         urllib.request.install_opener(req)
         urllib.request.urlretrieve(image_url,filename)
 
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
+        # pytesseract.pytesseract.tesseractcmd = r'C:\Program Files\Tesseract-OCR\tesseract'
         #print(pytesseract.image_to_string(filename))
         text = pytesseract.image_to_string(filename)
         #return 0
@@ -31,4 +32,5 @@ def url_reader():
         #return pytesseract.image_to_string(image_url)
     
 if __name__==('__main__'):
-    app.run(debug=False,host="0.0.0.0")
+    isDebug= True if getenv('Prod')=='Yes' else False
+    app.run(debug=isDebug,host='0.0.0.0')
